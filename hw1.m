@@ -9,11 +9,12 @@ yaux =  linspace(0,2,n);
 [x,y] = meshgrid(xaux,yaux);
 nx = n-1; 
 ny = n-1; 
-h = 1/nx;
+hx = 2*pi/nx;
+hy = 2/ny;
 
 % generate right hand side vector b
 b = zeros(n); 
-b((-pi/2)<x & x<0.5*pi )=-cos(x((-pi/2)<x & x<0.5*pi ));
+b((-pi/2)<x & x<0.5*pi )=-cos(x((-pi/2)<x & x<0.5*pi )); % set values based on the given stationary heat distribution 
 b(end,:) = [];
 b(:,end) =[];
 b = b(:);
@@ -23,7 +24,7 @@ I = speye(nx);
 e = ones(nx,1);
 T = spdiags([e -4*e circshift([2;e(2:end)],1)],[-1:1],nx,ny);
 S = spdiags([e e e e],[-nx+1 -1 1 nx-1],nx,ny);
-A = (kron(I,T) + kron(S,I))/h^2;
+A = (kron(I,T) + kron(S,I))/hx/hy;
 
 % Solve the linear system
 u = zeros(n);
